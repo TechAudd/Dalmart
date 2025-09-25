@@ -6,14 +6,10 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Check, Filter } from "lucide-react";
-import { useState } from "react";
 
-export default function SortByFilter({ onSortChange }) {
-  const [selected, setSelected] = useState("relevance");
-
+export default function SortByFilter({ setSortValue, sortValue }) {
   const handleChange = (value) => {
-    setSelected(value);
-    onSortChange?.(value);
+    setSortValue?.(value);
   };
 
   return (
@@ -31,7 +27,7 @@ export default function SortByFilter({ onSortChange }) {
         className="w-56 rounded-xl border border-green-200 shadow-lg bg-neutral-50"
       >
         <RadioGroup
-          value={selected}
+          value={sortValue}
           onValueChange={handleChange}
           className="space-y-2 !border-none"
         >
@@ -45,7 +41,7 @@ export default function SortByFilter({ onSortChange }) {
               htmlFor={opt.id}
               className={`flex !border-none text-xs items-center justify-between  rounded-md border cursor-pointer transition-all
                 ${
-                  selected === opt.id
+                  sortValue === opt.id
                     ? "bg-green-50  text-green-700 border-none"
                     : "   hover:bg-green-50/50"
                 }`}
@@ -58,7 +54,7 @@ export default function SortByFilter({ onSortChange }) {
                 />
                 <span>{opt.label}</span>
               </div>
-              {selected === opt.id && (
+              {sortValue === opt.id && (
                 <Check className="w-4 h-4 text-green-600" />
               )}
             </label>

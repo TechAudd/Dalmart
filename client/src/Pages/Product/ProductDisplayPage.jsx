@@ -1,7 +1,7 @@
 import ProductFilters from "@/Components/ProductComponents/ProductFilters";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react"; // clean cart icon
-import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomLoader } from "../../Components/CommonComponents/Loader";
 import { ProductCard } from "../../Components/ProductComponents/ProductCard";
@@ -9,13 +9,55 @@ import { useListProductsQuery } from "../../Services/productApiSlice";
 
 const ProductDisplayPage = () => {
   const navigate = useNavigate();
+  const [isOrganic, setIsOrganic] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [sortValue, setSortValue] = useState("relevance");
+
   const {
     data: productList,
     isLoading: isProductListLoading,
     isError: productListFetchError,
     refetch: productListRefetch,
   } = useListProductsQuery();
-  const [searchKey, setSearchKey] = useState("");
+
+useEffect(() => {
+  if (!productList) return;
+
+  // helper to extract numeric price from different shapes
+  const getPrice = (item) => {
+    const raw =
+      item?.price ??
+      item?.attributes?.price ??
+      (item?.variants && item.variants[0] && item.variants[0].price) ??
+      0;
+
+    // handle strings like "420.00" or "1,234.50"
+    if (typeof raw === "string") {
+      return parseFloat(raw.replace(/,/g, "")) || 0;
+    }
+    return Number(raw) || 0;
+  };
+
+  // 1. start from original productList to preserve 'relevance' order
+  let updatedList = productList.slice(); // shallow copy
+
+  // 2. filter (organic)
+  if (isOrganic) {
+    updatedList = updatedList.filter((item) => Boolean(item?.attributes?.organic));
+  }
+
+  // 3. sort based on sortValue
+  if (sortValue === "low-to-high") {
+    // use a copy to avoid mutating upstream arrays
+    updatedList = updatedList.slice().sort((a, b) => getPrice(a) - getPrice(b));
+  } else if (sortValue === "high-to-low") {
+    updatedList = updatedList.slice().sort((a, b) => getPrice(b) - getPrice(a));
+  } // relevance => keep original order
+
+  setFilteredProducts(updatedList);
+}, [isOrganic, sortValue, productList]);
+
+  console.log({sortValue})
 
   if (isProductListLoading) {
     return (
@@ -36,7 +78,7 @@ const ProductDisplayPage = () => {
     );
   }
 
-  if (!productList || productList.length === 0) {
+  if (!filteredProducts || filteredProducts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-gray-500">
         <p className="text-lg">No products available</p>
@@ -48,7 +90,12 @@ const ProductDisplayPage = () => {
     <div className="px-4 sm:px-6 lg:px-12 py-8 relative">
       {/* Sticky filter bar */}
       <div className="sticky top-10 z-50 bg-white shadow-md rounded-b-lg">
-        <ProductFilters />
+        <ProductFilters
+          isOrganic={isOrganic}
+          setIsOrganic={setIsOrganic}
+          setSortValue={setSortValue}
+          sortValue={sortValue}
+        />
       </div>
 
       <h1 className="text-2xl font-bold mb-6 text-gray-800 mt-10">
@@ -56,7 +103,7 @@ const ProductDisplayPage = () => {
       </h1>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {productList.map((productInfo) => (
+        {filteredProducts.map((productInfo) => (
           <ProductCard key={productInfo.id} product={productInfo} />
         ))}
       </div>

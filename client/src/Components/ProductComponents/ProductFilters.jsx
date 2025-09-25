@@ -4,7 +4,12 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 
-const ProductFilters = () => {
+const ProductFilters = ({
+  isOrganic,
+  setIsOrganic,
+  sortValue,
+  setSortValue,
+}) => {
   return (
     <div className="w-full border border-gray-200 shadow-md p-4 sm:p-6 rounded-2xl flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       {/* Search bar */}
@@ -28,10 +33,14 @@ const ProductFilters = () => {
 
         <div className="flex items-center gap-2 px-3 py-1.5  rounded-lg shadow-sm">
           <span className="text-sm font-medium">Organic</span>
-          <Switch className="!border" />
+          <Switch
+            value={isOrganic}
+            onCheckedChange={setIsOrganic}
+            className="!border"
+          />
         </div>
 
-        <SortByFilter onSortChange={() => {}} />
+        <SortByFilter sortValue={sortValue} setSortValue={setSortValue} />
       </div>
     </div>
   );
