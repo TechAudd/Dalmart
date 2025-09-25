@@ -61,14 +61,14 @@ const CartScreen = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 flex flex-col items-center ">
       <h2 className="text-3xl font-extrabold text-center text-green-700 mb-8">
         Your Cart 🛒
       </h2>
 
       {cartItems.length > 0 ? (
-        <>
-          <div className="space-y-4">
+        <div className="w-full md:w-[60%]">
+          <div className="space-y-4 ">
             {cartItems.map((item) => (
               <Card
                 key={item.id}
@@ -139,7 +139,7 @@ const CartScreen = () => {
               Place Order
             </Button>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
           <h2 className="text-xl font-medium text-gray-600">
