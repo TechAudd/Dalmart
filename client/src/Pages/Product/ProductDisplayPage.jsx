@@ -42,9 +42,9 @@ const ProductDisplayPage = () => {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-12 py-8">
+    <div className="px-4 sm:px-6 lg:px-12 py-8 ">
       {/* Sticky filter bar */}
-      <div className="sticky top-0 z-50 bg-white shadow-md rounded-b-lg">
+      <div className="sticky top-10 z-50 bg-white shadow-md rounded-b-lg ">
         <ProductFilters />
       </div>
 
