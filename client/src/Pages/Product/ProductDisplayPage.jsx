@@ -12,13 +12,15 @@ const ProductDisplayPage = () => {
   const [isOrganic, setIsOrganic] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortValue, setSortValue] = useState("relevance");
+  const [searchKey,setSearchKey] = useState('')
+  const [searchTrigger, setSearchTrigger] = useState(false);
 
   const {
     data: productList,
     isLoading: isProductListLoading,
     isError: productListFetchError,
     refetch: productListRefetch,
-  } = useListProductsQuery();
+  } = useListProductsQuery({search:searchKey}, { skip: !searchTrigger && searchKey !== "" });
 
 useEffect(() => {
   if (!productList) return;
@@ -57,7 +59,10 @@ useEffect(() => {
   setFilteredProducts(updatedList);
 }, [isOrganic, sortValue, productList]);
 
-  console.log({sortValue})
+const searchClicked = () => {
+  setSearchTrigger(true);
+  productListRefetch(); // will call API with current searchKey
+};
 
   if (isProductListLoading) {
     return (
@@ -80,11 +85,26 @@ useEffect(() => {
 
   if (!filteredProducts || filteredProducts.length === 0) {
     return (
+       <div className="px-4 sm:px-6 lg:px-12 py-8 relative">
+      {/* Sticky filter bar */}
+      <div className="sticky top-10 z-50 bg-white shadow-md rounded-b-lg">
+        <ProductFilters
+          isOrganic={isOrganic}
+          setIsOrganic={setIsOrganic}
+          setSortValue={setSortValue}
+          sortValue={sortValue}
+          searchClicked={searchClicked}
+          setSearchKey={setSearchKey}
+        />
+      </div>
       <div className="flex flex-col items-center justify-center min-h-screen text-gray-500">
         <p className="text-lg">No products available</p>
       </div>
+       </div>
     );
   }
+
+
 
   return (
     <div className="px-4 sm:px-6 lg:px-12 py-8 relative">
@@ -95,6 +115,8 @@ useEffect(() => {
           setIsOrganic={setIsOrganic}
           setSortValue={setSortValue}
           sortValue={sortValue}
+          searchClicked={searchClicked}
+          setSearchKey={setSearchKey}
         />
       </div>
 

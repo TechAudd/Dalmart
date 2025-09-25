@@ -3,7 +3,17 @@ import { apiSlice } from "./apiSlice";
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     listProducts: builder.query({
-      query: () => "/products",
+      // Accept multiple optional params: search, organic, sort
+      query: ({ search = "", isOrganic = false } = {}) => {
+        const params = new URLSearchParams();
+console.log({search})
+
+        if (search) params.append("search_query", search);
+        if (isOrganic) params.append("organic", "true");
+        // if (sort && sort !== "relevance") params.append("sort", sort);
+
+        return `/products?${params.toString()}`;
+      },
       keepUnusedDataFor: 5,
     }),
     getProductById: builder.query({
