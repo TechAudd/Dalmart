@@ -3,7 +3,7 @@ const {
   requestOtp,
   verifyOtp,
   loginWithPassword,
-} = require("../controllers/authController");
+} = require("../Controllers/authController");
 
 const router = express.Router();
 

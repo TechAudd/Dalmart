@@ -51,3 +51,34 @@ exports.getProductsByCategory = async (req, res) => {
     res.status(500).json({ message: "Error fetching products" });
   }
 };
+
+// 🔍 Search products by name/description
+exports.searchProducts = async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ message: "Search query is required" });
+
+  try {
+    const { data, error } = await supabase
+      .from("product")
+      .select("*")
+      .or(
+        `name.ilike.%${q}%,description.ilike.%${q}%`
+      ); // matches name OR description
+
+    if (error) return res.status(500).json({ error });
+
+    // Attach variants
+    for (let product of data) {
+      const { data: variants } = await supabase
+        .from("variant")
+        .select("*")
+        .eq("product_id", product.id);
+      product.variants = variants;
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error searching products" });
+  }
+};
