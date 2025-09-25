@@ -1,3 +1,5 @@
+const Razorpay = require("razorpay");
+
 const supabase = require("../db");
 
 // Get Cart
@@ -41,7 +43,8 @@ exports.updateCart = async (req, res) => {
         .eq("sku_id", item.sku_id)
         .maybeSingle();
 
-      if (variantErr) return res.status(500).json({ message: variantErr.message });
+      if (variantErr)
+        return res.status(500).json({ message: variantErr.message });
       if (!variantData) {
         outOfStock.push({ sku_id: item.sku_id, message: "Variant not found" });
         continue;
@@ -104,5 +107,33 @@ exports.updateCart = async (req, res) => {
   } catch (err) {
     console.error("Update Cart Error:", err.message);
     res.status(500).json({ message: "Error updating cart" });
+  }
+};
+
+const instance = new Razorpay({
+  key_id: "rzp_test_RLuthCgwOgOOwE",
+  key_secret: "fiIWmGiO4cTRPxQ32v0s7iov",
+});
+
+exports.rzpOrderCreation = async (req, res) => {
+  try {
+    console.log(req.body);
+    const options = {
+      amount: Number(req.body.amount * 100),
+      currency: "INR",
+      payment_capture: true,
+    };
+    const rzpOrder = await instance.orders.create(options);
+    console.log(rzpOrder);
+    res.status(200).json({
+      success: true,
+      order: rzpOrder,
+    });
+  } catch (error) {
+    console.error("Error in checkout:", error);
+    res.status(500).json({
+      success: false,
+      error: "An error occurred during checkout.",
+    });
   }
 };
