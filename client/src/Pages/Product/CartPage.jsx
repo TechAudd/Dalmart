@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCartItems, removeFromCart } from "../../Store/cartSlice";
-// import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,41 +19,28 @@ const CartScreen = () => {
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
-  //   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  //   const [placeOrder] = useCreateOrderMutation();
   const [orderId, setOrderId] = useState();
   const [showOrderPlacedModal, setShowOrderPlacedModal] = useState(false);
 
   const handleClearCart = () => dispatch(clearCartItems());
   const onClickRemove = (id) => dispatch(removeFromCart(id));
-
   const getProduct = (qty, price) => qty * price;
 
-  const extractOrderId = (input) => {
-    const match = input.match(/order(\d+)/);
-    if (match && match[1]) setOrderId(match[1]);
-  };
-
   const handlePlaceOrder = async () => {
-    // const {
-    //   data: { key },
-    // } = await axios.get(`${baseURL}/api/getkey`);
     const {
       data: { order },
-    } = await axios.post(`${baseURL}/cart/rzpOrder`, {
-      amount: totalPrice,
-    });
+    } = await axios.post(`${baseURL}/cart/rzpOrder`, { amount: totalPrice });
 
     const options = {
-      key: "rzp_test_RLuthCgwOgOOwE", // ✅ only public key
+      key: "rzp_test_RLuthCgwOgOOwE",
       amount: totalPrice,
       currency: "INR",
       name: "Dal Mart",
-      description: "Thank you for Choosing Dal Mart",
-      order_id: order.id, // ✅ must be generated on server
+      description: "Thank you for choosing Dal Mart",
+      order_id: order.id,
       handler: function (response) {
-        console.log("Payment successful!", response);
+        dispatch(clearCartItems());
       },
       prefill: {
         name: "Dal Mart",
@@ -67,9 +53,6 @@ const CartScreen = () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
-
-    const razor = new window.Razorpay(options);
-    razor.open();
   };
 
   const closeOrderPlacedModal = () => {
@@ -79,31 +62,52 @@ const CartScreen = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h2 className="text-2xl font-bold text-center mb-6">Cart</h2>
+      <h2 className="text-3xl font-extrabold text-center text-green-700 mb-8">
+        Your Cart 🛒
+      </h2>
 
       {cartItems.length > 0 ? (
         <>
           <div className="space-y-4">
             {cartItems.map((item) => (
-              <Card key={item._id} className="bg-green-100">
-                <CardContent className="flex justify-between items-center">
-                  <div>
-                    <h5 className="text-lg font-semibold">{item.item}</h5>
-                    <p>Price: ₹{item.price}</p>
-                    <p>
-                      Quantity: {item.qty} x {item.price}
+              <Card
+                key={item.id}
+                className="shadow-md hover:shadow-lg transition rounded-xl"
+              >
+                <CardContent className="flex gap-4 items-center p-4">
+                  {/* Product Image */}
+                  <img
+                    src={item.images?.[0]}
+                    alt={item.name}
+                    className="w-20 h-20 object-cover rounded-md border"
+                  />
+
+                  {/* Product Info */}
+                  <div className="flex-1">
+                    <h5 className="text-lg font-semibold text-gray-800">
+                      {item.name}
+                    </h5>
+                    <p className="text-sm text-gray-600">{item.brand}</p>
+                    <p className="text-sm text-gray-500 line-clamp-2">
+                      {item.description}
+                    </p>
+                    <p className="mt-1 text-sm text-gray-700">
+                      Qty: {item.qty} × ₹{item.price}
                     </p>
                   </div>
-                  <div className="flex flex-col items-end space-y-2">
+
+                  {/* Price + Actions */}
+                  <div className="flex flex-col items-end justify-between h-full space-y-2">
                     <Button
-                      variant="destructive"
+                      //   variant="destructive"
+                      className="text-red-600"
                       size="sm"
-                      onClick={() => onClickRemove(item._id)}
+                      onClick={() => onClickRemove(item.id)}
                     >
                       Remove
                     </Button>
-                    <p className="font-bold">
-                      {getProduct(item.qty, item.price)}/-
+                    <p className="font-bold text-green-700">
+                      ₹{getProduct(item.qty, item.price)}
                     </p>
                   </div>
                 </CardContent>
@@ -111,22 +115,25 @@ const CartScreen = () => {
             ))}
           </div>
 
-          <div className="mt-4 p-4 border-2 border-green-500 rounded bg-green-100 text-right">
-            <p className="font-bold text-lg">Total</p>
-            <p className="text-lg">{totalPrice}</p>
+          {/* Total Summary */}
+          <div className="mt-6 p-5 border rounded-lg bg-green-50 shadow-md">
+            <div className="flex justify-between text-lg font-semibold">
+              <span>Total</span>
+              <span className="text-green-700">₹{totalPrice}</span>
+            </div>
           </div>
 
-          <div className="mt-6 flex space-x-4">
+          {/* Actions */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-4">
             <Button
-              variant="outline-destructive"
-              className="flex-1"
+              variant="outline"
+              className="flex-1 border-red-600 text-red-600 hover:bg-red-50"
               onClick={handleClearCart}
             >
               Clear Cart
             </Button>
             <Button
-              variant="outline-success"
-              className="flex-1"
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
               onClick={handlePlaceOrder}
             >
               Place Order
@@ -135,13 +142,15 @@ const CartScreen = () => {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-          <h2 className="text-xl">Cart Seems Empty !!</h2>
+          <h2 className="text-xl font-medium text-gray-600">
+            Cart Seems Empty !!
+          </h2>
           <Button
             variant="outline"
-            onClick={() => navigate("/menu")}
+            onClick={() => navigate("/")}
             className="border-green-700"
           >
-            Menu
+            Browse Menu
           </Button>
         </div>
       )}
@@ -153,14 +162,19 @@ const CartScreen = () => {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Order Placed</DialogTitle>
+            <DialogTitle className="text-green-700">
+              🎉 Order Placed
+            </DialogTitle>
           </DialogHeader>
-          <div className="mt-2">
+          <div className="mt-2 space-y-2">
             <p>Your order has been placed successfully!</p>
             <p className="font-bold">Token Number: {orderId}</p>
           </div>
           <DialogFooter>
-            <Button variant="outline-success" onClick={closeOrderPlacedModal}>
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={closeOrderPlacedModal}
+            >
               Close
             </Button>
           </DialogFooter>

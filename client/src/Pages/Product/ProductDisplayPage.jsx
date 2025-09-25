@@ -1,18 +1,21 @@
 import ProductFilters from "@/Components/ProductComponents/ProductFilters";
 import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react"; // clean cart icon
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CustomLoader } from "../../Components/CommonComponents/Loader";
 import { ProductCard } from "../../Components/ProductComponents/ProductCard";
 import { useListProductsQuery } from "../../Services/productApiSlice";
 
 const ProductDisplayPage = () => {
+  const navigate = useNavigate();
   const {
     data: productList,
     isLoading: isProductListLoading,
     isError: productListFetchError,
     refetch: productListRefetch,
   } = useListProductsQuery();
-  const [searchKey,setSearchKey] = useState("")
+  const [searchKey, setSearchKey] = useState("");
 
   if (isProductListLoading) {
     return (
@@ -42,14 +45,14 @@ const ProductDisplayPage = () => {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-12 py-8 ">
+    <div className="px-4 sm:px-6 lg:px-12 py-8 relative">
       {/* Sticky filter bar */}
-      <div className="sticky top-10 z-50 bg-white shadow-md rounded-b-lg ">
+      <div className="sticky top-10 z-50 bg-white shadow-md rounded-b-lg">
         <ProductFilters />
       </div>
 
       <h1 className="text-2xl font-bold mb-6 text-gray-800 mt-10">
-        What would you like to shop !
+        What would you like to shop!
       </h1>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -57,6 +60,14 @@ const ProductDisplayPage = () => {
           <ProductCard key={productInfo.id} product={productInfo} />
         ))}
       </div>
+
+      {/* Floating cart button */}
+      <button
+        onClick={() => navigate("/cart")}
+        className="fixed bottom-10 right-10 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition transform hover:scale-110 active:scale-95"
+      >
+        <ShoppingCart size={24} />
+      </button>
     </div>
   );
 };

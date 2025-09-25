@@ -15,6 +15,10 @@ const ProductFilters = () => {
         </Button>
       </div>
 
+      <h2 className="text-3xl font-extrabold text-green-600 tracking-wide text-center">
+        Dal Mart
+      </h2>
+
       {/* Filter actions */}
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <Button className="cursor-pointer hover:shadow-md flex items-center gap-2">
