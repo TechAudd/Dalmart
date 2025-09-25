@@ -5,12 +5,12 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
-const productRoutes = require("./routes/productRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-// const orderRoutes = require("./routes/orderRoutes");
-const addressRoutes = require("./routes/addressRoutes");
+const authRoutes = require("./Routes/authRoutes");
+const categoryRoutes = require("./Routes/categoryRoutes");
+const productRoutes = require("./Routes/productRoutes");
+const cartRoutes = require("./Routes/cartRoutes");
+//const orderRoutes = require("./routes/orderRoutes");
+const addressRoutes = require("./Routes/addressRoutes");
 
 const server = express();
 
