@@ -1,4 +1,6 @@
+import ProductFilters from "@/Components/ProductComponents/ProductFilters";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { CustomLoader } from "../../Components/CommonComponents/Loader";
 import { ProductCard } from "../../Components/ProductComponents/ProductCard";
 import { useListProductsQuery } from "../../Services/productApiSlice";
@@ -10,6 +12,7 @@ const ProductDisplayPage = () => {
     isError: productListFetchError,
     refetch: productListRefetch,
   } = useListProductsQuery();
+  const [searchKey,setSearchKey] = useState("")
 
   if (isProductListLoading) {
     return (
@@ -40,7 +43,8 @@ const ProductDisplayPage = () => {
 
   return (
     <div className="px-4 sm:px-6 lg:px-12 py-8">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Our Products</h1>
+      <ProductFilters />
+      <h1 className="text-2xl font-bold mb-6 text-gray-800 mt-10">What would you like to shop !</h1>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {productList.map((productInfo) => (
           <ProductCard key={productInfo.id} product={productInfo} />

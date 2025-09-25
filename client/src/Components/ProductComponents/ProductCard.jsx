@@ -1,8 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 
 export const ProductCard = ({ product }) => {
+  const [quantity, setQuantity] = useState(0);
+
+  const handleAddToCart = () => {
+    setQuantity(1); // Start with 1 when added
+  };
+
+  const increaseQty = () => setQuantity((prev) => prev + 1);
+  const decreaseQty = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 0));
   return (
     <Card className="group !border-none w-80 rounded-2xl shadow-md hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 overflow-hidden bg-white">
       {/* Image */}
@@ -43,14 +52,35 @@ export const ProductCard = ({ product }) => {
         </div>
 
         {/* CTA */}
-        <Button
-          className="w-full mt-3 border border-green-600 text-green-600 
+        {quantity !== 0 ? (
+          <div className="w-full mt-3 flex items-center justify-between border border-green-600 rounded-lg px-3 py-2 shadow-md">
+            <Button
+              onClick={decreaseQty}
+              className="text-green-600 text-xl font-bold px-2 hover:text-green-700 transition"
+            >
+              –
+            </Button>
+            <span className="text-lg font-semibold text-gray-800">
+              {quantity}
+            </span>
+            <Button
+              onClick={increaseQty}
+              className="text-green-600 text-xl font-bold px-2 hover:text-green-700 transition"
+            >
+              +
+            </Button>
+          </div>
+        ) : (
+          <Button
+            className="w-full mt-3 border border-green-600 text-green-600 
              shadow-md rounded-lg 
              hover:bg-green-600 hover:text-white 
              hover:shadow-xl t"
-        >
-          Add to Cart
-        </Button>
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
