@@ -10,17 +10,15 @@ export const testApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
 
-    // updateAppliedLeave: builder.mutation({
-    //   query: (data) => ({
-    //     url: baseURL + "/updateleave",
-    //     method: ["PUT"],
-    //     body: data,
-    //     headers: {
-    //       Authorization: `Bearer ${wardenAuthToken}`,
-    //     },
-    //   }),
-    // }),
+    updateAppliedLeave: builder.mutation({
+      query: (data) => ({
+        url: baseURL + "/updateleave",
+        method: ["PUT"],
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useFetchTestQuery } = testApiSlice;
+export const { useFetchTestQuery, useUpdateAppliedLeaveMutation } =
+  testApiSlice;
