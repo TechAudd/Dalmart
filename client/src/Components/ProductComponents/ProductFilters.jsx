@@ -1,8 +1,9 @@
 import { Search } from "lucide-react";
-import SortByFilter from "@/CommonComponents/SortFilter";
-import { Button } from "@/ui/button";
-import { Input } from "@/ui/input";
-import { Switch } from "@/ui/switch";
+import SortByFilter from "@/Components/CommonComponents/SortFilter";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Switch } from "@/Components/ui/switch";
+
 
 const ProductFilters = ({
   isOrganic,
