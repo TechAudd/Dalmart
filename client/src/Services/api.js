@@ -1,1 +1,1 @@
-export const baseURL = "https://dalmart-4ifl.onrender.com";
+export const baseURL = "https://dalmart-4ifl.onrender.com/api";
