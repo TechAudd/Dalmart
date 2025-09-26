@@ -1,6 +1,6 @@
-import ProductFilters from "../Components/ProductComponents/ProductFilters";
+import ProductFilters from "../../Components/ProductComponents/ProductFilters";
 import { Button } from "../Components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { Files, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomLoader } from "../../Components/CommonComponents/Loader";
@@ -13,7 +13,7 @@ const ProductDisplayPage = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortValue, setSortValue] = useState("relevance");
   const [searchKey,setSearchKey] = useState('')
-  const [searchTrigger, setSearchTrigger] = useState(false);
+  const [searchTrigger, setSearchTrigger] = useState(false);  
 
   const {
     data: productList,
