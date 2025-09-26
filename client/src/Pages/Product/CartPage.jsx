@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../Components/ui/dialog";
-import { baseURL } from "../Services/api";
+import { baseURL } from "../../Services/api";
 import axios from "axios";
 
 const CartScreen = () => {
