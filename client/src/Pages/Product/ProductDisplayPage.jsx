@@ -1,5 +1,5 @@
 import ProductFilters from "../Components/ProductComponents/ProductFilters";
-import { Button } from "../components/ui/button";
+import { Button } from "../Components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

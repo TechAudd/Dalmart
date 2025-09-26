@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCartItems, removeFromCart } from "../../Store/cartSlice";
 
-import { Button } from "../components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../Components/ui/button";
+import { Card, CardContent } from "../Components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { baseURL } from "@/Services/api";
+} from "../components/ui/dialog";
+import { baseURL } from "../Services/api";
 import axios from "axios";
 
 const CartScreen = () => {

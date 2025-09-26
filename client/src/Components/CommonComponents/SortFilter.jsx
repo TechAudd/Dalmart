@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "../Components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "../Components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "../Components/ui/radio-group";
 import { Check, Filter } from "lucide-react";
 
 export default function SortByFilter({ setSortValue, sortValue }) {
