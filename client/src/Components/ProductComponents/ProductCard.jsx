@@ -1,7 +1,7 @@
-import { Badge } from "../Components/ui/badge";
-import { Button } from "../Components/ui/button";
-import { Card, CardContent } from "../Components/ui/card";
-import { addToCart, removeFromCart } from "../Store/cartSlice";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
+import { Card, CardContent } from "@/Components/ui/card";
+import { addToCart, removeFromCart } from "@/Store/cartSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

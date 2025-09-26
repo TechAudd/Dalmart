@@ -1,11 +1,11 @@
-import ProductFilters from "../../Components/ProductComponents/ProductFilters";
-import { Button } from "../Components/ui/button";
+import ProductFilters from "@/Components/ProductComponents/ProductFilters";
+import { Button } from "@/Components/ui/button";
 import { Files, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomLoader } from "../../Components/CommonComponents/Loader";
-import { ProductCard } from "../../Components/ProductComponents/ProductCard";
-import { useListProductsQuery } from "../../Services/productApiSlice";
+import { CustomLoader } from "@/Components/CommonComponents/Loader";
+import { ProductCard } from "@/Components/ProductComponents/ProductCard";
+import { useListProductsQuery } from "@/Services/productApiSlice";
 
 const ProductDisplayPage = () => {
   const navigate = useNavigate();
