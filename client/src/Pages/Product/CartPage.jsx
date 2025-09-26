@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog";
+} from "../Components/ui/dialog";
 import { baseURL } from "../Services/api";
 import axios from "axios";
 
